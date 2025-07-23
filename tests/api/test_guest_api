@@ -1,0 +1,9 @@
+from fastapi.testclient import TestClient
+from main import app
+
+client = TestClient(app)
+
+def test_register_guest():
+    response = client.post("/guests", json={"name": "Alice", "age": 25})
+    assert response.status_code == 200
+    assert "id" in response.json()

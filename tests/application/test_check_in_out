@@ -1,0 +1,41 @@
+from src.application.use_cases import CheckInUseCase, CheckOutUseCase
+from infrastructure.repositories import SqlAlchemyBookingRepository
+from infrastructure.models import Base, GuestModel, RoomModel, BookingModel
+from src.domain.value_objects import RoomType, BookingReference
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from datetime import date, timedelta
+
+def setup_booking(session, status="booked"):
+    Base.metadata.create_all(engine := create_engine("sqlite:///:memory:"))
+    s = Session(bind=engine)
+
+    guest = GuestModel(id="g1", name="Bob", age=30)
+    room = RoomModel(number="301", type=RoomType.DELUXE.value)
+    ref = BookingReference.generate().value
+    session.add_all([
+        guest, room,
+        BookingModel(
+            reference=ref,
+            guest_id=guest.id,
+            room_number=room.number,
+            check_in=date.today() + timedelta(days=2),
+            check_out=date.today() + timedelta(days=4),
+            status=status,
+            price=400
+        )
+    ])
+    session.commit()
+    return SqlAlchemyBookingRepository(session), ref, session
+
+def test_check_in():
+    repo, ref, session = setup_booking(session := Session())
+    use_case = CheckInUseCase(repo)
+    updated = use_case.execute(ref)
+    assert updated.status == "checked_in"
+
+def test_check_out():
+    repo, ref, session = setup_booking(session := Session(), status="checked_in")
+    use_case = CheckOutUseCase(repo)
+    updated = use_case.execute(ref)
+    assert updated.status == "checked_out"
