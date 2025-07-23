@@ -4,26 +4,38 @@ cachedir: .pytest_cache
 rootdir: C:\Users\thami\Documents\GitHub\ExaltAI_Hotel_Booking_System
 configfile: pyproject.toml
 plugins: anyio-4.9.0, cov-6.2.1, typeguard-2.13.3
-collecting ... collected 9 items / 1 error
+collecting ... collected 10 items
 
-=================================== ERRORS ====================================
-________________ ERROR collecting tests/api/test_endpoints.py _________________
-.venv\Lib\site-packages\starlette\testclient.py:44: in <module>
-    import httpx
-E   ModuleNotFoundError: No module named 'httpx'
+tests/api/test_endpoints.py::test_full_booking_flow PASSED
+tests/application/test_cancel_booking.py::test_cancel_booking PASSED
+tests/domain/test_availability.py::test_availability_excludes_booked_room PASSED
+tests/domain/test_booking.py::test_booking_price_and_reference PASSED
+tests/domain/test_booking.py::test_underage_guest PASSED
+tests/domain/test_booking.py::test_cancel_and_flow PASSED
+tests/domain/test_create_booking.py::test_create_booking_succeeds PASSED
+tests/infrastructure/test_booking_repository.py::test_add_and_get_booking PASSED
+tests/infrastructure/test_guest_repository.py::test_list_bookings_returns_complete_booking_objects PASSED
+tests/infrastructure/test_room_repository.py::test_get_room_by_number PASSED
 
-During handling of the above exception, another exception occurred:
-tests\api\test_endpoints.py:1: in <module>
-    from fastapi.testclient import TestClient
-.venv\Lib\site-packages\fastapi\testclient.py:1: in <module>
-    from starlette.testclient import TestClient as TestClient  # noqa
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.venv\Lib\site-packages\starlette\testclient.py:46: in <module>
-    raise RuntimeError(
-E   RuntimeError: The starlette.testclient module requires the httpx package to be installed.
-E   You can install this with:
-E       $ pip install httpx
-=========================== short test summary info ===========================
-ERROR tests/api/test_endpoints.py - RuntimeError: The starlette.testclient mo...
-!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
-============================== 1 error in 0.86s ===============================
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.11.13-final-0 _______________
+
+Name                                 Stmts   Miss  Cover   Missing
+------------------------------------------------------------------
+src\__init__.py                          0      0   100%
+src\api\__init__.py                      0      0   100%
+src\api\main.py                        112     19    83%   40-44, 88-89, 102-103, 114-115, 126-127, 138-139, 145-149
+src\application\__init__.py              0      0   100%
+src\application\ports.py                39     10    74%   13, 17, 21, 25, 30, 34, 39, 43, 47, 52
+src\application\use_cases.py            81     10    88%   33, 36, 41, 44, 55, 68, 79, 92, 100, 103
+src\domain\__init__.py                   0      0   100%
+src\domain\entities.py                  48      6    88%   35, 38, 40, 46, 51, 56
+src\domain\services.py                  11      0   100%
+src\domain\value_objects.py             21      1    95%   17
+src\infrastructure\__init__.py           0      0   100%
+src\infrastructure\models.py            21      0   100%
+src\infrastructure\payment.py            4      0   100%
+src\infrastructure\repositories.py      67      4    94%   41, 66, 81, 94
+------------------------------------------------------------------
+TOTAL                                  404     50    88%
+============================= 10 passed in 1.15s ==============================
