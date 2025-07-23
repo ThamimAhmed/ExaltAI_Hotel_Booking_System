@@ -1,0 +1,27 @@
+[project]
+name = "hotel_booking_system"
+version = "0.1.0"
+description = "Crown Hotels booking system"
+
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "sqlalchemy",
+    "aiosqlite",
+    "pydantic",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "pyre-check",
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.pytest.ini_options]
+addopts = "-sv"
+
+[tool.pyre]
+source-directories = ["src"]
+python-version = "3.13"
